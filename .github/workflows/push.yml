@@ -1,0 +1,30 @@
+name: push
+
+on:
+  push:
+    branches:
+    - master
+    paths:
+    - 'docker/**'
+
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: checkout
+      uses: actions/checkout@v2
+
+    - name: docker-login
+      env:
+        DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+        DOCKER_REGISTRY_URL: ${{ secrets.DOCKER_REGISTRY_URL }}
+        DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+      run: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+
+    - name: docker-build
+      working-directory: ./docker
+      run: docker build -t mildsalsa/terraform-action:latest .
+
+    - name: docker-publish
+      run: docker push mildsalsa/terraform-action:latest
