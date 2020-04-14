@@ -36,4 +36,4 @@ outputs:
     description: 'Whether or not the Terraform formatting was written to source files.'
 runs:
   using: 'docker'
-  image: 'mildsalsa/terraform-action'
+  image: 'docker://mildsalsa/terraform-action'
